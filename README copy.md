@@ -1,4 +1,4 @@
-# User Service
+# Event Service
 
 ## Description
 
