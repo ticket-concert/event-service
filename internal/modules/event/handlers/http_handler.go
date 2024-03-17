@@ -47,7 +47,6 @@ func (e EventHttpHandler) CreateEvent(c *fiber.Ctx) error {
 	req.UserId = userId
 
 	if err := e.Validator.Struct(req); err != nil {
-		fmt.Println(err)
 		return helpers.RespError(c, e.Logger, errors.BadRequest(err.Error()))
 	}
 	resp, err := e.EventUsecaseCommand.CreateEvent(c.Context(), *req)

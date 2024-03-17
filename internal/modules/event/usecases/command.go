@@ -202,8 +202,6 @@ func (c commandUsecase) CreateOnlineTicketConfig(origCtx context.Context, payloa
 			return nil, errors.InternalServerError("failed marshal event")
 		}
 
-		fmt.Println(eventTag)
-
 		if payload.UserId != eventTag.CreatedBy {
 			return nil, errors.BadRequest("tag already exist, please create event with the same user to use this tag")
 		}

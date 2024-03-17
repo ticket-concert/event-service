@@ -14,17 +14,37 @@ type MongodbRepositoryQuery struct {
 	mock.Mock
 }
 
-// FindOneUserId provides a mock function with given fields: ctx, userId
-func (_m *MongodbRepositoryQuery) FindOneUserId(ctx context.Context, userId string) <-chan helpers.Result {
-	ret := _m.Called(ctx, userId)
+// FindOneContinentByCode provides a mock function with given fields: ctx, code
+func (_m *MongodbRepositoryQuery) FindOneContinentByCode(ctx context.Context, code string) <-chan helpers.Result {
+	ret := _m.Called(ctx, code)
 
 	if len(ret) == 0 {
-		panic("no return value specified for FindOneUserId")
+		panic("no return value specified for FindOneContinentByCode")
 	}
 
 	var r0 <-chan helpers.Result
 	if rf, ok := ret.Get(0).(func(context.Context, string) <-chan helpers.Result); ok {
-		r0 = rf(ctx, userId)
+		r0 = rf(ctx, code)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(<-chan helpers.Result)
+		}
+	}
+
+	return r0
+}
+
+// FindOneCountry provides a mock function with given fields: ctx, id
+func (_m *MongodbRepositoryQuery) FindOneCountry(ctx context.Context, id int) <-chan helpers.Result {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindOneCountry")
+	}
+
+	var r0 <-chan helpers.Result
+	if rf, ok := ret.Get(0).(func(context.Context, int) <-chan helpers.Result); ok {
+		r0 = rf(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(<-chan helpers.Result)

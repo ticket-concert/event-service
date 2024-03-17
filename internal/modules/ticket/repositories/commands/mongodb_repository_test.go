@@ -1,9 +1,10 @@
-package queries_test
+package commands_test
 
 import (
 	"context"
-	"event-service/internal/modules/address"
-	mongoRQ "event-service/internal/modules/address/repositories/queries"
+	"event-service/internal/modules/ticket"
+	"event-service/internal/modules/ticket/models/entity"
+	mongoRC "event-service/internal/modules/ticket/repositories/commands"
 	"event-service/internal/pkg/helpers"
 	mocks "event-service/mocks/pkg/databases/mongodb"
 	mocklog "event-service/mocks/pkg/log"
@@ -18,14 +19,14 @@ type CommandTestSuite struct {
 	suite.Suite
 	mockMongodb *mocks.Collections
 	mockLogger  *mocklog.Logger
-	repository  address.MongodbRepositoryQuery
+	repository  ticket.MongodbRepositoryCommand
 	ctx         context.Context
 }
 
 func (suite *CommandTestSuite) SetupTest() {
 	suite.mockMongodb = new(mocks.Collections)
 	suite.mockLogger = &mocklog.Logger{}
-	suite.repository = mongoRQ.NewQueryMongodbRepository(
+	suite.repository = mongoRC.NewCommandMongodbRepository(
 		suite.mockMongodb,
 		suite.mockLogger,
 	)
@@ -36,14 +37,20 @@ func TestCommandTestSuite(t *testing.T) {
 	suite.Run(t, new(CommandTestSuite))
 }
 
-func (suite *CommandTestSuite) TestFindOneCountry() {
+func (suite *CommandTestSuite) TestInsertManyTicketCollection() {
+	payload := []entity.Ticket{
+		{
+			TicketId: "id",
+			EventId:  "id",
+		},
+	}
 
-	// Mock FindOne
+	// Mock UpsertOne
 	expectedResult := make(chan helpers.Result)
-	suite.mockMongodb.On("FindOne", mock.Anything, mock.Anything).Return((<-chan helpers.Result)(expectedResult))
+	suite.mockMongodb.On("InsertMany", mock.Anything, mock.Anything).Return((<-chan helpers.Result)(expectedResult))
 
 	// Act
-	result := suite.repository.FindOneCountry(suite.ctx, 1)
+	result := suite.repository.InsertManyTicketCollection(suite.ctx, payload)
 	// Asset
 	assert.NotNil(suite.T(), result, "Expected a result")
 
@@ -56,18 +63,22 @@ func (suite *CommandTestSuite) TestFindOneCountry() {
 	// Wait for the goroutine to complete
 	<-result
 
-	// Assert FindOne
-	suite.mockMongodb.AssertCalled(suite.T(), "FindOne", mock.Anything, mock.Anything)
+	// Assert UpsertOne
+	suite.mockMongodb.AssertCalled(suite.T(), "InsertMany", mock.Anything, mock.Anything)
 }
 
-func (suite *CommandTestSuite) TestFindOneContinentByCode() {
+func (suite *CommandTestSuite) TestUpsertOneOnlineTicketConfig() {
+	payload := entity.OnlineTicketConfig{
+		Tag:        "tag",
+		TotalQuota: 10,
+	}
 
-	// Mock FindOne
+	// Mock UpsertOne
 	expectedResult := make(chan helpers.Result)
-	suite.mockMongodb.On("FindOne", mock.Anything, mock.Anything).Return((<-chan helpers.Result)(expectedResult))
+	suite.mockMongodb.On("UpsertOne", mock.Anything, mock.Anything).Return((<-chan helpers.Result)(expectedResult))
 
 	// Act
-	result := suite.repository.FindOneContinentByCode(suite.ctx, "code")
+	result := suite.repository.UpsertOneOnlineTicketConfig(suite.ctx, payload)
 	// Asset
 	assert.NotNil(suite.T(), result, "Expected a result")
 
@@ -80,6 +91,6 @@ func (suite *CommandTestSuite) TestFindOneContinentByCode() {
 	// Wait for the goroutine to complete
 	<-result
 
-	// Assert FindOne
-	suite.mockMongodb.AssertCalled(suite.T(), "FindOne", mock.Anything, mock.Anything)
+	// Assert UpsertOne
+	suite.mockMongodb.AssertCalled(suite.T(), "UpsertOne", mock.Anything, mock.Anything)
 }
