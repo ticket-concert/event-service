@@ -14,6 +14,7 @@ import (
 	"event-service/internal/modules/event/models/entity"
 	"event-service/internal/modules/event/models/request"
 	"event-service/internal/modules/ticket"
+	"event-service/internal/pkg/constants"
 	"event-service/internal/pkg/errors"
 	"event-service/internal/pkg/log"
 
@@ -113,6 +114,10 @@ func (c commandUsecase) CreateEvent(origCtx context.Context, payload request.Eve
 	tiketIds := make([]string, 0)
 	tickets := make([]ticketEntity.Ticket, 0)
 	for _, v := range payload.Tickets {
+		if v.TicketType != constants.Bronze && v.TicketType != constants.Gold && v.TicketType != constants.Silver &&
+			v.TicketType != constants.Wood && v.TicketType != constants.Online {
+			return nil, errors.BadRequest("ticketType must be 'Online' or 'Wood' or 'Gold' or 'Bronze' or 'Silver'")
+		}
 		ticketId := uuid.New().String()
 		ticket := ticketEntity.Ticket{
 			TicketId:       ticketId,
@@ -156,6 +161,7 @@ func (c commandUsecase) CreateEvent(origCtx context.Context, payload request.Eve
 		},
 		Description: payload.Description,
 		Tag:         payload.Tag,
+		EventUrl:    payload.EventUrl,
 		TicketIds:   tiketIds,
 		CreatedBy:   payload.UserId,
 		UpdatedBy:   payload.UserId,

@@ -6,3 +6,11 @@ type MetaData struct {
 	TotalPage int64 `json:"totalPage"`
 	TotalData int64 `json:"totalData"`
 }
+
+const (
+	Online = "Online"
+	Gold   = "Gold"
+	Silver = "Silver"
+	Bronze = "Bronze"
+	Wood   = "Wood"
+)
