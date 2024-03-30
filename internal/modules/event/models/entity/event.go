@@ -18,6 +18,7 @@ type Event struct {
 	Country       Country   `json:"country" bson:"country"`
 	Description   string    `json:"description" bson:"description"`
 	Tag           string    `json:"tag" bson:"tag"`
+	EventUrl      string    `json:"eventUrl" bson:"eventUrl"`
 	TicketIds     []string  `json:"ticketIds" bson:"ticketIds"`
 	CreatedAt     time.Time `json:"createdAt" bson:"createdAt"`
 	UpdatedAt     time.Time `json:"updatedAt" bson:"updatedAt"`

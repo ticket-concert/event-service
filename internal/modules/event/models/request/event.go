@@ -20,6 +20,7 @@ type EventReq struct {
 	Country       Country  `json:"country" validate:"required"`
 	Description   string   `json:"description" validate:"required"`
 	Tag           string   `json:"tag" validate:"required"`
+	EventUrl      string   `json:"eventUrl" validate:"required"`
 	Tickets       []Ticket `json:"tickets" validate:"required"`
 	UserId        string   `json:"userId" validate:"required"`
 }
