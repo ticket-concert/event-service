@@ -21,9 +21,9 @@ Event Service is service that used to create event, view event
 3. Fill out the env configuration
 ```bash
 #General
-SERVICE_NAME=service_worker
+SERVICE_NAME=service_event
 SERVICE_VERSION=1.0.0
-SERVICE_PORT=9001
+SERVICE_PORT=9006
 SERVICE_ENV=development
 USERNAME_BASIC_AUTH=username
 PASSWORD_BASIC_AUTH=password
